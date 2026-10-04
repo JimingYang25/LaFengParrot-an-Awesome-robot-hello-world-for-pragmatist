@@ -5,7 +5,7 @@ MuJoCo model and a reinforcement-learning locomotion stack. The mechanical
 design targets a Jetson Orin Nano Super 8 GB and commonly available parts.
 
 ## Current status
-<img width="1018" height="764" alt="屏幕录制 2026-10-05 033540" src="https://github.com/user-attachments/assets/1adbbdf9-e6c8-4775-beb8-8d4764a9c03f" />
+<img width="680" height="440" alt="屏幕录制 2026-10-05 033540" src="https://github.com/user-attachments/assets/1adbbdf9-e6c8-4775-beb8-8d4764a9c03f" />
 
 
 
@@ -19,7 +19,7 @@ design targets a Jetson Orin Nano Super 8 GB and commonly available parts.
   as ground contact. Fix this before reducing the harness below 0.08.
 
 
-<img width="2240" height="1920" alt="exploded" src="https://github.com/user-attachments/assets/67be27cf-9a0d-472f-b9ac-eb9058fd098b" />
+<img width="880" height="640" alt="exploded" src="https://github.com/user-attachments/assets/67be27cf-9a0d-472f-b9ac-eb9058fd098b" />
 
 
 The harness provides only lateral and attitude stabilization. It applies no
