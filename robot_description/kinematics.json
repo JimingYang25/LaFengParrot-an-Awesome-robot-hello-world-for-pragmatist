@@ -15,8 +15,8 @@
     "single_source": "this file + CAD/dims/dimensions.json + CAD/source/assembly/poses.py (instance placements); all three robot formats generate from these"
   },
   "dimensions_ref": {
-    "dimensions_json": "D:/Desktop/LaFengParrot/CAD/dims/dimensions.json",
-    "assembly_report": "D:/Desktop/LaFengParrot/CAD/source/assembly/ASSEMBLY_REPORT.md",
+    "dimensions_json": "CAD/dims/dimensions.json",
+    "assembly_report": "CAD/source/assembly/ASSEMBLY_REPORT.md",
     "key": {
       "hip_half_spacing_mm": 27,
       "hip_rail_mm": 54,

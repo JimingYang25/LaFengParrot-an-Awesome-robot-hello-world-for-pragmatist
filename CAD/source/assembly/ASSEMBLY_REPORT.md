@@ -1,7 +1,7 @@
 # LaFengParrot Assembly Report — REV-B stability rebuild
 
-Date: 2026-09-27. Project path `D:\Desktop\LaFengParrot\CAD` (renamed from
-LaFengPirate). Rewritten `source\assembly\poses.py` for the REV-B stability
+Date: 2026-09-27. Project directory `CAD/` (renamed from LaFengPirate).
+Rewritten `source/assembly/poses.py` for the REV-B stability
 anchors: 54 mm hip rail (±27), 40x44x4 feet with 10 mm inner gap, neck pitch axis
 lowered to global z=185, carrier at board-top z=72, battery tray on the
 trunk floor. All numbers below were computed from the baked solids (bbox,
@@ -121,14 +121,14 @@ half-base is the weak axis; the 162 mm CoM height already meets the REV-B target
 - At M = 1.38 kg (without lump): required 0.893 N·m → **margin 3.05×**.
 - PASS (≈3× as expected).
 
-## 7. Exports (absolute paths)
+## 7. Exports (repository-relative paths)
 
 Full assemblies:
-- `D:\Desktop\LaFengParrot\CAD\exports\step\LaFengParrot_Standing.STEP`
-- `D:\Desktop\LaFengParrot\CAD\exports\step\LaFengParrot_Exploded.STEP`
+- `CAD/exports/step/LaFengParrot_Standing.STEP`
+- `CAD/exports/step/LaFengParrot_Exploded.STEP`
 
 Per-part local STEP + STL (unrotated local frame), in
-`D:\Desktop\LaFengParrot\CAD\exports\step\` and `...\exports\stl\`:
+`CAD/exports/step/` and `CAD/exports/stl/`:
 battery_tray, bearing_mr63, bec_5v3a, fuse_holder, head_shell, hip_mount,
 imuc_icm42688p, lipo_3s_2200, neck_linkage, orin_carrier, power_mount,
 sc0043_c001, shin_link, st3215_c018, thigh_link, trunk_shell, wing_arm_L,

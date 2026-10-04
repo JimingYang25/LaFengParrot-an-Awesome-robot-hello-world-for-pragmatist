@@ -6,7 +6,7 @@ This file is the contract every CAD module builds against. Do not deviate silent
 
 
 
-* CAD root: `D:\Desktop\LaFengPirate\CAD`
+* CAD root: the repository-relative `CAD/` directory
 
 * `dims\dimensions.json` + `dims\dimensions.md` — the ONLY source of truth for hardware dimensions (produced by the dimension-research agent; every number has `verified: true/false` and a `source` URL).
 

@@ -48,20 +48,27 @@ The saved policy uses a 60-value normalized observation, separate two-layer
 six leg residuals currently affect the walking command; wings and neck remain
 at their reference positions.
 
+## Clone the repository
+
+```bash
+git clone https://github.com/JimingYang25/LaFengParrot-awesome-robot-hello_world-.git LaFengParrot
+cd LaFengParrot
+```
+
+All commands below are run from the repository root.
+
 ## Validate the robot model
 
 From WSL2:
 
 ```bash
-cd /mnt/d/Desktop/LaFengParrot/robot_description
-python make_mjcf.py
-python verify_mjcf.py
+python robot_description/make_mjcf.py
+python robot_description/verify_mjcf.py
 ```
 
 ## Watch the current policy
 
 ```bash
-cd /mnt/d/Desktop/LaFengParrot
 python rl/watch_gait_policy.py --harness 0.08
 ```
 
@@ -71,7 +78,6 @@ has not yet passed the graduation test at that setting.
 ## Evaluate the checkpoint
 
 ```bash
-cd /mnt/d/Desktop/LaFengParrot
 python rl/evaluate_gait_ppo.py --episodes 10 --harness 0.08 --device cpu
 ```
 

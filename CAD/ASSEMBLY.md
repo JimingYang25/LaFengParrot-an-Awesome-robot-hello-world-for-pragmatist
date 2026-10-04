@@ -6,7 +6,7 @@ Global frame: **+X beak/forward, +Y parrot-left, +Z up**; origin on the sagittal
 plane at the two hip_roll output axes (the "hip plane", z=0). Units mm, masses g.
 
 Placement authority: `source/assembly/ASSEMBLY_REPORT.md` §2 (**REV-B stability
-rebuild**, 2026-09-27; path `D:\Desktop\LaFengParrot\CAD`). Dimensions authority:
+rebuild**, 2026-09-27; repository path `CAD/`). Dimensions authority:
 `dims/dimensions.md` (+ `dimensions.json`). Kinematic contract: `CONVENTIONS.md` §6.
 Nothing here is invented; every number traces to one of those three files or a
 BOM.md row. REV-B anchors: 54 mm hip rail, 40×44 feet (10 mm inner gap), neck
