@@ -51,7 +51,7 @@ at their reference positions.
 ## Clone the repository
 
 ```bash
-git clone https://github.com/JimingYang25/LaFengParrot-an-Awesome-robot-hello-world-for-pragmatist.git LaFengParrot
+git clone https://github.com/JimingYang25/LaFengParrot__An-Awesome-Host-to-Local-ROBOT
 cd LaFengParrot
 ```
 
