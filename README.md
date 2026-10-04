@@ -39,6 +39,11 @@ forward force, so forward travel must come from the robot's gait.
 | `rl/` | Gymnasium environments, PPO training, evaluation and policy viewers |
 | `BOM.md` | Bill of materials and component notes |
 
+Policy developers should begin with the
+[policy development and tuning guide](docs/POLICY_DEVELOPMENT.md). It explains
+the observation/action contract, safe curriculum workflow, tuning controls,
+evaluation gates, and how to connect another RL implementation.
+
 ## Verified development environment
 
 - Windows with WSL2 Ubuntu 24.04
