@@ -18,6 +18,10 @@ design targets a Jetson Orin Nano Super 8 GB and commonly available parts.
 - Known issue: occasional left/right sole self-contact is currently interpreted
   as ground contact. Fix this before reducing the harness below 0.08.
 
+
+<img width="2240" height="1920" alt="exploded" src="https://github.com/user-attachments/assets/67be27cf-9a0d-472f-b9ac-eb9058fd098b" />
+
+
 The harness provides only lateral and attitude stabilization. It applies no
 forward force, so forward travel must come from the robot's gait.
 
