@@ -57,6 +57,19 @@ cd LaFengParrot
 
 All commands below are run from the repository root.
 
+## Install Python dependencies
+
+Python 3.12 is recommended. Create and activate an isolated environment, then
+install the tested dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+For CUDA training, install the PyTorch wheel matching the host's CUDA setup
+before running the command above. The CUDA-local build version may include a
+suffix such as `+cu130`.
+
 ## Validate the robot model
 
 From WSL2:
