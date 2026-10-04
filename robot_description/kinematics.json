@@ -1,0 +1,106 @@
+{
+  "name": "lafengparrot",
+  "version": "REV-B 2026-09-27",
+  "conventions": {
+    "frame": {
+      "+X": "forward (beak)",
+      "+Y": "parrot-left",
+      "+Z": "up",
+      "origin": "midpoint between the two hip_roll output axes at their height (hip plane, z=0)"
+    },
+    "units": "mm / kg / rad / s",
+    "zero_pose": "standing: legs straight (all leg joints 0), wings level (+/-Y), neck straight up (yaw=0, pitch=0)",
+    "free_base": "trunk is a floating base (6 free DOF: 3 pos + 3 rot)",
+    "actuated_joints": 10,
+    "single_source": "this file + CAD/dims/dimensions.json + CAD/source/assembly/poses.py (instance placements); all three robot formats generate from these"
+  },
+  "dimensions_ref": {
+    "dimensions_json": "D:/Desktop/LaFengParrot/CAD/dims/dimensions.json",
+    "assembly_report": "D:/Desktop/LaFengParrot/CAD/source/assembly/ASSEMBLY_REPORT.md",
+    "key": {
+      "hip_half_spacing_mm": 27,
+      "hip_rail_mm": 54,
+      "thigh_len_mm": 42,
+      "shin_len_mm": 50,
+      "leg_drop_mm": 138,
+      "trunk_floor_z": 33,
+      "trunk_roof_z": 133,
+      "carrier_board_top_z": 72,
+      "neck_pitch_local_z": 52,
+      "neck_pitch_global_z": 185,
+      "sole_mm": [40, 44, 4],
+      "sole_profile_xz_mm": [[-20, -52], [-18, -53.4], [-16, -54], [16, -54], [18, -53.4], [20, -52]],
+      "sole_underside_local_z_in_shin": -54,
+      "coM_above_floor_mm_target": 162.5,
+      "mass_kg_target": 1.485
+    }
+  },
+  "links": [
+    {"name": "trunk",   "frame_origin": [0, 0, 0],   "instances": ["trunk_shell", "orin_carrier", "battery_tray", "lipo_3s_2200", "power_mount", "xt60_switch", "bec_5v3a", "fuse_holder", "hip_mount_L", "hip_mount_R", "st3215_hiproll_L", "st3215_hiproll_R", "sc0043_wing_L", "sc0043_wing_R"], "note": "hip_roll and wing servo BODIES ride on the trunk (rotor side drives the child link)"},
+    {"name": "hip_L",   "frame_origin": [0, 27, 0],   "instances": ["st3215_hippitch_L"], "note": "N1 segment: hip_roll rotor side; carries the hip_pitch servo body; motor body in parent, rotor drives thigh"},
+    {"name": "hip_R",   "frame_origin": [0, -27, 0],  "instances": ["st3215_hippitch_R"], "note": "N1 segment (R)"},
+    {"name": "thigh_L", "frame_origin": [0, 27, -42], "instances": ["thigh_link_L", "st3215_knee_L"], "note": "N2 segment: thigh beam from hip_pitch axis to knee axis; carries the knee servo body"},
+    {"name": "thigh_R", "frame_origin": [0, -27, -42], "instances": ["thigh_link_R", "st3215_knee_R"], "note": "N2 segment (R)"},
+    {"name": "shin_L",  "frame_origin": [0, 27, -84],  "instances": ["shin_link_L"], "note": "N3 segment: shin + fixed compound-rocker foot; no wheel or ankle; lowest sole contact is local z=-54"},
+    {"name": "shin_R",  "frame_origin": [0, -27, -84], "instances": ["shin_link_R"], "note": "N3 segment (R)"},
+    {"name": "wing_L",  "frame_origin": [0, 62, 60],  "instances": ["wing_arm_L"], "note": "wing arm + printed panel; wing servo body on trunk (shoulder)"},
+    {"name": "wing_R",  "frame_origin": [0, -62, 60], "instances": ["wing_arm_R"], "note": "wing arm (R)"},
+    {"name": "neck_yaw", "frame_origin": [0, 0, 133], "instances": ["neck_linkage", "sc0043_neckyaw", "sc0043_neckpitch"], "note": "yaw rotor side: linkage + BOTH neck servo bodies (simplification: the yaw servo body is bolted to the base; putting it in the rotating link is a <3 g-equivalent, sub-mm CoM error; documented)"},
+    {"name": "head",    "frame_origin": [0, 0, 185],  "instances": ["head_shell", "imuc_icm42688p"], "note": "head shell + physical IMU breakout"}
+  ],
+  "joints": [
+    {"name": "hip_roll_L",   "type": "revolute", "parent": "trunk",   "child": "hip_L",   "origin": [0, 27, 0],    "axis": [1, 0, 0], "servo": "ST-3215-C018", "limit_deg": [-22, 22],   "effort_nm": 2.72, "velocity_deg_s": 300, "zero_deg": 0, "note": "limit [EST] microduck-like"},
+    {"name": "hip_roll_R",   "type": "revolute", "parent": "trunk",   "child": "hip_R",   "origin": [0, -27, 0],   "axis": [1, 0, 0], "servo": "ST-3215-C018", "limit_deg": [-22, 22],   "effort_nm": 2.72, "velocity_deg_s": 300, "zero_deg": 0, "note": "limit [EST] microduck-like"},
+    {"name": "hip_pitch_L",  "type": "revolute", "parent": "hip_L",   "child": "thigh_L", "origin": [0, 27, -42],  "axis": [0, 1, 0], "servo": "ST-3215-C018", "limit_deg": [-90, 90],  "effort_nm": 2.72, "velocity_deg_s": 300, "zero_deg": 0, "note": "crouch pose ~+26 deg; limit [EST]"},
+    {"name": "hip_pitch_R",  "type": "revolute", "parent": "hip_R",   "child": "thigh_R", "origin": [0, -27, -42], "axis": [0, 1, 0], "servo": "ST-3215-C018", "limit_deg": [-90, 90],  "effort_nm": 2.72, "velocity_deg_s": 300, "zero_deg": 0, "note": "limit [EST]"},
+    {"name": "knee_L",       "type": "revolute", "parent": "thigh_L", "child": "shin_L",  "origin": [0, 27, -84],  "axis": [0, 1, 0], "servo": "ST-3215-C018", "limit_deg": [0, 150],   "effort_nm": 2.72, "velocity_deg_s": 300, "zero_deg": 0, "note": "positive = backward flexion from straight; limit [EST]"},
+    {"name": "knee_R",       "type": "revolute", "parent": "thigh_R", "child": "shin_R",  "origin": [0, -27, -84], "axis": [0, 1, 0], "servo": "ST-3215-C018", "limit_deg": [0, 150],   "effort_nm": 2.72, "velocity_deg_s": 300, "zero_deg": 0, "note": "limit [EST]"},
+    {"name": "wing_flap_L",  "type": "revolute", "parent": "trunk",   "child": "wing_L",  "origin": [0, 62, 60],  "axis": [1, 0, 0], "servo": "SC-0043-C001", "limit_deg": [-45, 45],  "effort_nm": 0.22, "velocity_deg_s": 300, "zero_deg": 0, "note": "flap up/down from level; limit [EST]"},
+    {"name": "wing_flap_R",  "type": "revolute", "parent": "trunk",   "child": "wing_R",  "origin": [0, -62, 60], "axis": [-1, 0, 0], "servo": "SC-0043-C001", "limit_deg": [-45, 45],  "effort_nm": 0.22, "velocity_deg_s": 300, "zero_deg": 0, "note": "limit [EST]"},
+    {"name": "neck_yaw",     "type": "revolute", "parent": "trunk",   "child": "neck_yaw", "origin": [0, 0, 133],  "axis": [0, 0, 1], "servo": "SC-0043-C001", "limit_deg": [-90, 90],  "effort_nm": 0.22, "velocity_deg_s": 300, "zero_deg": 0, "note": "limit [EST]"},
+    {"name": "neck_pitch",   "type": "revolute", "parent": "neck_yaw", "child": "head",   "origin": [0, 0, 185],  "axis": [0, 1, 0], "servo": "SC-0043-C001", "limit_deg": [-45, 45],  "effort_nm": 0.22, "velocity_deg_s": 300, "zero_deg": 0, "note": "nose-down -45 verified clear (36 mm above roof); limit [EST]"}
+  ],
+  "actuators": {
+    "type": "position",
+    "defaults": {"kp": 40, "kv": 4, "gear": 1.0},
+    "armature_kgm2": {"leg_joints": 0.01, "wing_neck_joints": 0.002},
+    "ctrlrange": "= joint limits",
+    "note": "50 Hz joint-target interface (microduck-style); kp/kv/armature are [EST] starting points for PPO tuning"
+  },
+  "sites": {
+    "imu_trunk": {"pos": [0, 0, 50], "note": "[EST] policy IMU site on the trunk; physical ICM-42688-P rides in the head (part of head link mass) at z~191.5"}
+  },
+  "contact": {
+    "sole": {
+      "type": "compound_rocker",
+      "width_half_m": 0.022,
+      "contact_half_thickness_m": 0.0015,
+      "profile_xz_m": [[-0.020, -0.052], [-0.018, -0.0534], [-0.016, -0.054], [0.016, -0.054], [0.018, -0.0534], [0.020, -0.052]],
+      "facet_names": ["heel_outer", "heel_inner", "center", "toe_inner", "toe_outer"],
+      "friction": [0.9, 0.005, 0.0001],
+      "note": "Five fixed box facets approximate the CAD rocker underside. The 32 mm centre facet is flat at z=-54 mm; 4 mm toe and heel zones rise symmetrically to z=-52 mm. No wheel, axle, ankle, or extra actuator."
+    },
+    "ground": {"type": "plane", "friction": 1.0},
+    "self_collision": "off by default; only soles contact (RL walking asset)"
+  },
+  "lump": {
+    "mass_g": 105,
+    "items": "fasteners + horns + bearings + wiring + cables [EST]",
+    "distribution": "by link mass fraction [EST]",
+    "note": "the 105 g lump reconciles the 1.38 kg CAD solids to the 1.485 kg whole-robot mass used in the REV-B CoM (162.5 mm above floor)"
+  },
+  "sim_options": {"timestep_s": 0.002, "control_freq_hz": 50, "gravity": [0, 0, -9.81]},
+  "servo_map": {"legs (hip_roll/pitch, knee)": "ST-3215-C018 (FT-SCS, 4-14 V, direct 3S)", "wings + neck": "SC-0043-C001 (FT-SCS, 3.7-6 V via 5 V BEC)"},
+  "generation": [
+    "generate_meshes.py  -> meshes/visual/*.stl + meshes/collision/*_col.stl + inertials.json (CAD solids grouped by link)",
+    "make_mjcf.py        -> mjcf/lafengparrot.xml (primary PPO asset)",
+    "make_urdf.py        -> urdf/lafengparrot.urdf",
+    "make_usd.py         -> usd/lafengparrot.usd",
+    "verify.py           -> cross-format consistency check (joints, axes, order, limits)"
+  ],
+  "notes_est": [
+    "joint limits, kp/kv/armature, friction, imu site, lump distribution: [EST] starting values, tunable in RL",
+    "hip_roll axis at z=0, hip_pitch 42 below it, knee 84 below; soles at z=-138; neck pitch axis at 185",
+    "the later MuJoCo model (this MJCF) is the primary PPO asset and must stay the source of truth for training"
+  ]
+}

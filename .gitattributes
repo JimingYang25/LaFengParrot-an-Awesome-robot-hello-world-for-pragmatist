@@ -1,0 +1,17 @@
+* text=auto
+
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.urdf text eol=lf
+*.STEP text eol=lf
+*.step text eol=lf
+
+*.stl binary
+*.STL binary
+*.pdf binary
+*.png binary
+*.zip binary
+*.pkl binary
+*.usd binary

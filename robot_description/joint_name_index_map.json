@@ -1,0 +1,92 @@
+{
+  "model": "lafengparrot (MJCF, nested serial chain)",
+  "nq": 17,
+  "nv": 16,
+  "nu": 10,
+  "freejoint_qpos_layout": "3 trans + 4 quat = 7 values; qvel 3 trans + 3 rot = 6 values",
+  "note": "MuJoCo qpos/qvel order is tree-DFS (leg-major). RL code MUST index observations/actions BY NAME via this map, never by hard-coded position. Actuator (ctrl) order is the canonical kinematics.json order.",
+  "qpos_index": {
+    "freejoint_trans": [
+      0,
+      1,
+      2
+    ],
+    "freejoint_quat": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "hip_roll_L": 7,
+    "hip_pitch_L": 8,
+    "knee_L": 9,
+    "hip_roll_R": 10,
+    "hip_pitch_R": 11,
+    "knee_R": 12,
+    "wing_flap_L": 13,
+    "wing_flap_R": 14,
+    "neck_yaw": 15,
+    "neck_pitch": 16
+  },
+  "qvel_index": {
+    "freejoint_rot": [
+      0,
+      1,
+      2
+    ],
+    "hip_roll_L": 6,
+    "hip_pitch_L": 7,
+    "knee_L": 8,
+    "hip_roll_R": 9,
+    "hip_pitch_R": 10,
+    "knee_R": 11,
+    "wing_flap_L": 12,
+    "wing_flap_R": 13,
+    "neck_yaw": 14,
+    "neck_pitch": 15
+  },
+  "actuator_index": {
+    "hip_roll_L": 0,
+    "hip_roll_R": 1,
+    "hip_pitch_L": 2,
+    "hip_pitch_R": 3,
+    "knee_L": 4,
+    "knee_R": 5,
+    "wing_flap_L": 6,
+    "wing_flap_R": 7,
+    "neck_yaw": 8,
+    "neck_pitch": 9
+  },
+  "qpos_order": [
+    "freejoint",
+    "hip_roll_L",
+    "hip_pitch_L",
+    "knee_L",
+    "hip_roll_R",
+    "hip_pitch_R",
+    "knee_R",
+    "wing_flap_L",
+    "wing_flap_R",
+    "neck_yaw",
+    "neck_pitch"
+  ],
+  "actuator_order": [
+    "hip_roll_L",
+    "hip_roll_R",
+    "hip_pitch_L",
+    "hip_pitch_R",
+    "knee_L",
+    "knee_R",
+    "wing_flap_L",
+    "wing_flap_R",
+    "neck_yaw",
+    "neck_pitch"
+  ],
+  "_checks": {
+    "model.nq == 7 + 10 == 17": true,
+    "model.nv == 6 + 10 == 16": true,
+    "model.nu == 10": true,
+    "qpos addresses match XML DFS (7+i)": true,
+    "actuators bind to the 10 named joints": true
+  }
+}

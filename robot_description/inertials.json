@@ -1,0 +1,701 @@
+{
+  "name": "lafengparrot_inertials",
+  "version": "REV-B 2026-09-27",
+  "units": {
+    "mass": "g",
+    "length": "mm",
+    "length_m": "m",
+    "inertia": "kg*m^2"
+  },
+  "petg_density_g_cm3": 1.27,
+  "tessellation": {
+    "linear_deflection_mm": 0.4,
+    "angular_deflection_rad": 0.2
+  },
+  "lump_g": 105.0,
+  "lump_note": "105 g build lump [EST] distributed by link mass fraction, placed at each link CoM: rescales mass only; link CoM and inertia-about-CoM unchanged.",
+  "hardware_mass_source": {
+    "st3215_c018": 55.0,
+    "sc0043_c001": 6.6,
+    "orin_carrier": 175.0,
+    "lipo_3s_2200": 185.0,
+    "bec_5v3a": 15.0,
+    "xt60_switch": 30.0,
+    "fuse_holder": 10.0,
+    "imuc_icm42688p": 4.0
+  },
+  "links": {
+    "trunk": {
+      "mass_g": 924.834,
+      "mass_cad_g": 859.391,
+      "lump_g": 65.443,
+      "com_mm": [
+        1.038,
+        -6.302,
+        54.028
+      ],
+      "com_m": [
+        0.001038,
+        -0.006302,
+        0.054028
+      ],
+      "inertia_kgm2": [
+        [
+          0.001816009,
+          -1.1491e-05,
+          6.6285e-05
+        ],
+        [
+          -1.1491e-05,
+          0.001863494,
+          6.0741e-05
+        ],
+        [
+          6.6285e-05,
+          6.0741e-05,
+          0.001415911
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -64.0,
+        "xmax": 72.0,
+        "ymin": -77.8,
+        "ymax": 77.8,
+        "zmin": -15.05,
+        "zmax": 133.0
+      },
+      "bbox_m": {
+        "xmin": -0.064,
+        "xmax": 0.072,
+        "ymin": -0.0778,
+        "ymax": 0.0778,
+        "zmin": -0.01505,
+        "zmax": 0.133
+      },
+      "frame_origin_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mass_breakdown_g": {
+        "trunk_shell": 216.456,
+        "orin_carrier": 175.0,
+        "battery_tray": 21.207,
+        "lipo_3s_2200": 185.0,
+        "power_mount": 20.374,
+        "xt60_switch": 30.0,
+        "bec_5v3a": 15.0,
+        "fuse_holder": 10.0,
+        "hip_mount_L": 31.577,
+        "hip_mount_R": 31.577,
+        "st3215_hiproll_L": 55.0,
+        "st3215_hiproll_R": 55.0,
+        "sc0043_wing_L": 6.6,
+        "sc0043_wing_R": 6.6
+      },
+      "visual_faces": 25662,
+      "collision_hull_faces": 554
+    },
+    "hip_L": {
+      "mass_g": 59.188,
+      "mass_cad_g": 55.0,
+      "lump_g": 4.188,
+      "com_mm": [
+        -0.108,
+        -0.099,
+        -42.0
+      ],
+      "com_m": [
+        -0.000108,
+        -9.9e-05,
+        -0.042
+      ],
+      "inertia_kgm2": [
+        [
+          9.254e-06,
+          1.39e-07,
+          0.0
+        ],
+        [
+          1.39e-07,
+          1.1712e-05,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.5581e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -22.6,
+        "xmax": 22.6,
+        "ymin": -38.5,
+        "ymax": 26.0,
+        "zmin": -54.35,
+        "zmax": -29.65
+      },
+      "bbox_m": {
+        "xmin": -0.0226,
+        "xmax": 0.0226,
+        "ymin": -0.0385,
+        "ymax": 0.026,
+        "zmin": -0.05435,
+        "zmax": -0.02965
+      },
+      "frame_origin_mm": [
+        0.0,
+        27.0,
+        0.0
+      ],
+      "mass_breakdown_g": {
+        "st3215_hippitch_L": 55.0
+      },
+      "visual_faces": 3572,
+      "collision_hull_faces": 378
+    },
+    "hip_R": {
+      "mass_g": 59.188,
+      "mass_cad_g": 55.0,
+      "lump_g": 4.188,
+      "com_mm": [
+        -0.108,
+        0.099,
+        -42.0
+      ],
+      "com_m": [
+        -0.000108,
+        9.9e-05,
+        -0.042
+      ],
+      "inertia_kgm2": [
+        [
+          9.254e-06,
+          -1.39e-07,
+          0.0
+        ],
+        [
+          -1.39e-07,
+          1.1712e-05,
+          -0.0
+        ],
+        [
+          0.0,
+          -0.0,
+          1.5581e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -22.6,
+        "xmax": 22.6,
+        "ymin": -26.0,
+        "ymax": 38.5,
+        "zmin": -54.35,
+        "zmax": -29.65
+      },
+      "bbox_m": {
+        "xmin": -0.0226,
+        "xmax": 0.0226,
+        "ymin": -0.026,
+        "ymax": 0.0385,
+        "zmin": -0.05435,
+        "zmax": -0.02965
+      },
+      "frame_origin_mm": [
+        0.0,
+        -27.0,
+        0.0
+      ],
+      "mass_breakdown_g": {
+        "st3215_hippitch_R": 55.0
+      },
+      "visual_faces": 3572,
+      "collision_hull_faces": 378
+    },
+    "thigh_L": {
+      "mass_g": 142.197,
+      "mass_cad_g": 132.135,
+      "lump_g": 10.062,
+      "com_mm": [
+        -0.04,
+        -0.041,
+        -29.741
+      ],
+      "com_m": [
+        -4e-05,
+        -4.1e-05,
+        -0.029741
+      ],
+      "inertia_kgm2": [
+        [
+          6.4095e-05,
+          1.39e-07,
+          -7.9e-08
+        ],
+        [
+          1.39e-07,
+          7.5887e-05,
+          -6.6e-08
+        ],
+        [
+          -7.9e-08,
+          -6.6e-08,
+          4.7524e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -25.3,
+        "xmax": 25.3,
+        "ymin": -38.5,
+        "ymax": 26.0,
+        "zmin": -57.55,
+        "zmax": 15.55
+      },
+      "bbox_m": {
+        "xmin": -0.0253,
+        "xmax": 0.0253,
+        "ymin": -0.0385,
+        "ymax": 0.026,
+        "zmin": -0.05755,
+        "zmax": 0.01555
+      },
+      "frame_origin_mm": [
+        0.0,
+        27.0,
+        -42.0
+      ],
+      "mass_breakdown_g": {
+        "thigh_link_L": 77.135,
+        "st3215_knee_L": 55.0
+      },
+      "visual_faces": 8728,
+      "collision_hull_faces": 298
+    },
+    "thigh_R": {
+      "mass_g": 142.197,
+      "mass_cad_g": 132.135,
+      "lump_g": 10.062,
+      "com_mm": [
+        -0.04,
+        0.041,
+        -29.741
+      ],
+      "com_m": [
+        -4e-05,
+        4.1e-05,
+        -0.029741
+      ],
+      "inertia_kgm2": [
+        [
+          6.4095e-05,
+          -1.39e-07,
+          -7.9e-08
+        ],
+        [
+          -1.39e-07,
+          7.5887e-05,
+          6.6e-08
+        ],
+        [
+          -7.9e-08,
+          6.6e-08,
+          4.7524e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -25.3,
+        "xmax": 25.3,
+        "ymin": -26.0,
+        "ymax": 38.5,
+        "zmin": -57.55,
+        "zmax": 15.55
+      },
+      "bbox_m": {
+        "xmin": -0.0253,
+        "xmax": 0.0253,
+        "ymin": -0.026,
+        "ymax": 0.0385,
+        "zmin": -0.05755,
+        "zmax": 0.01555
+      },
+      "frame_origin_mm": [
+        0.0,
+        -27.0,
+        -42.0
+      ],
+      "mass_breakdown_g": {
+        "thigh_link_R": 77.135,
+        "st3215_knee_R": 55.0
+      },
+      "visual_faces": 8728,
+      "collision_hull_faces": 298
+    },
+    "shin_L": {
+      "mass_g": 20.159,
+      "mass_cad_g": 18.733,
+      "lump_g": 1.426,
+      "com_mm": [
+        0.0,
+        0.0,
+        -35.691
+      ],
+      "com_m": [
+        0.0,
+        0.0,
+        -0.035691
+      ],
+      "inertia_kgm2": [
+        [
+          8.396e-06,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          8.3e-06,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          2.781e-06
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -20.0,
+        "xmax": 20.0,
+        "ymin": -22.0,
+        "ymax": 22.0,
+        "zmin": -54.0,
+        "zmax": 8.0
+      },
+      "bbox_m": {
+        "xmin": -0.02,
+        "xmax": 0.02,
+        "ymin": -0.022,
+        "ymax": 0.022,
+        "zmin": -0.054,
+        "zmax": 0.008
+      },
+      "frame_origin_mm": [
+        0.0,
+        27.0,
+        -84.0
+      ],
+      "mass_breakdown_g": {
+        "shin_link_L": 18.733
+      },
+      "visual_faces": 812,
+      "collision_hull_faces": 36
+    },
+    "shin_R": {
+      "mass_g": 20.159,
+      "mass_cad_g": 18.733,
+      "lump_g": 1.426,
+      "com_mm": [
+        0.0,
+        0.0,
+        -35.691
+      ],
+      "com_m": [
+        0.0,
+        0.0,
+        -0.035691
+      ],
+      "inertia_kgm2": [
+        [
+          8.396e-06,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          8.3e-06,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          2.781e-06
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -20.0,
+        "xmax": 20.0,
+        "ymin": -22.0,
+        "ymax": 22.0,
+        "zmin": -54.0,
+        "zmax": 8.0
+      },
+      "bbox_m": {
+        "xmin": -0.02,
+        "xmax": 0.02,
+        "ymin": -0.022,
+        "ymax": 0.022,
+        "zmin": -0.054,
+        "zmax": 0.008
+      },
+      "frame_origin_mm": [
+        0.0,
+        -27.0,
+        -84.0
+      ],
+      "mass_breakdown_g": {
+        "shin_link_R": 18.733
+      },
+      "visual_faces": 812,
+      "collision_hull_faces": 36
+    },
+    "wing_L": {
+      "mass_g": 20.454,
+      "mass_cad_g": 19.006,
+      "lump_g": 1.447,
+      "com_mm": [
+        4.1,
+        55.225,
+        -0.0
+      ],
+      "com_m": [
+        0.0041,
+        0.055225,
+        -0.0
+      ],
+      "inertia_kgm2": [
+        [
+          2.9438e-05,
+          -9.45e-07,
+          -0.0
+        ],
+        [
+          -9.45e-07,
+          4.088e-06,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          3.3386e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -22.53,
+        "xmax": 32.53,
+        "ymin": -11.4,
+        "ymax": 128.93,
+        "zmin": -5.95,
+        "zmax": 5.95
+      },
+      "bbox_m": {
+        "xmin": -0.02253,
+        "xmax": 0.03253,
+        "ymin": -0.0114,
+        "ymax": 0.12893,
+        "zmin": -0.00595,
+        "zmax": 0.00595
+      },
+      "frame_origin_mm": [
+        0.0,
+        62.0,
+        60.0
+      ],
+      "mass_breakdown_g": {
+        "wing_arm_L": 19.006
+      },
+      "visual_faces": 1512,
+      "collision_hull_faces": 152
+    },
+    "wing_R": {
+      "mass_g": 20.454,
+      "mass_cad_g": 19.006,
+      "lump_g": 1.447,
+      "com_mm": [
+        4.1,
+        -55.225,
+        0.0
+      ],
+      "com_m": [
+        0.0041,
+        -0.055225,
+        0.0
+      ],
+      "inertia_kgm2": [
+        [
+          2.9438e-05,
+          9.45e-07,
+          0.0
+        ],
+        [
+          9.45e-07,
+          4.088e-06,
+          -0.0
+        ],
+        [
+          0.0,
+          -0.0,
+          3.3386e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -22.53,
+        "xmax": 32.53,
+        "ymin": -128.93,
+        "ymax": 11.4,
+        "zmin": -5.95,
+        "zmax": 5.95
+      },
+      "bbox_m": {
+        "xmin": -0.02253,
+        "xmax": 0.03253,
+        "ymin": -0.12893,
+        "ymax": 0.0114,
+        "zmin": -0.00595,
+        "zmax": 0.00595
+      },
+      "frame_origin_mm": [
+        0.0,
+        -62.0,
+        60.0
+      ],
+      "mass_breakdown_g": {
+        "wing_arm_R": 19.006
+      },
+      "visual_faces": 1512,
+      "collision_hull_faces": 152
+    },
+    "neck_yaw": {
+      "mass_g": 34.111,
+      "mass_cad_g": 31.697,
+      "lump_g": 2.414,
+      "com_mm": [
+        -0.157,
+        0.234,
+        26.486
+      ],
+      "com_m": [
+        -0.000157,
+        0.000234,
+        0.026486
+      ],
+      "inertia_kgm2": [
+        [
+          1.5013e-05,
+          1.2e-08,
+          4.2e-08
+        ],
+        [
+          1.2e-08,
+          1.5595e-05,
+          -1.89e-07
+        ],
+        [
+          4.2e-08,
+          -1.89e-07,
+          3.982e-06
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -29.15,
+        "xmax": 22.0,
+        "ymin": -22.0,
+        "ymax": 22.0,
+        "zmin": -0.0,
+        "zmax": 57.75
+      },
+      "bbox_m": {
+        "xmin": -0.02915,
+        "xmax": 0.022,
+        "ymin": -0.022,
+        "ymax": 0.022,
+        "zmin": -0.0,
+        "zmax": 0.05775
+      },
+      "frame_origin_mm": [
+        0.0,
+        0.0,
+        133.0
+      ],
+      "mass_breakdown_g": {
+        "neck_linkage": 18.497,
+        "sc0043_neckyaw": 6.6,
+        "sc0043_neckpitch": 6.6
+      },
+      "visual_faces": 5048,
+      "collision_hull_faces": 226
+    },
+    "head": {
+      "mass_g": 40.903,
+      "mass_cad_g": 38.008,
+      "lump_g": 2.894,
+      "com_mm": [
+        3.175,
+        0.0,
+        30.144
+      ],
+      "com_m": [
+        0.003175,
+        0.0,
+        0.030144
+      ],
+      "inertia_kgm2": [
+        [
+          2.0722e-05,
+          -0.0,
+          -1.108e-06
+        ],
+        [
+          -0.0,
+          3.0039e-05,
+          -0.0
+        ],
+        [
+          -1.108e-06,
+          -0.0,
+          2.5399e-05
+        ]
+      ],
+      "bbox_mm": {
+        "xmin": -27.5,
+        "xmax": 51.57,
+        "ymin": -22.5,
+        "ymax": 22.5,
+        "zmin": 4.99,
+        "zmax": 71.06
+      },
+      "bbox_m": {
+        "xmin": -0.0275,
+        "xmax": 0.05157,
+        "ymin": -0.0225,
+        "ymax": 0.0225,
+        "zmin": 0.00499,
+        "zmax": 0.07106
+      },
+      "frame_origin_mm": [
+        0.0,
+        0.0,
+        185.0
+      ],
+      "mass_breakdown_g": {
+        "head_shell": 34.008,
+        "imuc_icm42688p": 4.0
+      },
+      "visual_faces": 2196,
+      "collision_hull_faces": 146
+    }
+  },
+  "reconciliation": {
+    "total_mass_g": 1483.84,
+    "total_mass_kg": 1.4838,
+    "target_mass_kg": 1.485,
+    "cad_mass_g": 1378.84,
+    "lump_total_g": 105.0,
+    "global_com_mm": [
+      0.83,
+      -3.92,
+      24.57
+    ],
+    "com_height_above_floor_mm": 162.57,
+    "target_com_height_mm": 162.5,
+    "floor_z_mm": -138.0,
+    "convention": "global CoM = sum(m_i*(com_link_i+frame_origin_i))/sum(m_i); height = global z - floor_z(-138 mm)."
+  }
+}

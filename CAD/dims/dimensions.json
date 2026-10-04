@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "project": "LaFengParrot CAD hardware dimensions",
+    "build_variant": "all-Feetech (legs 6x ST-3215-C018, wings/neck 4x SC-0043-C001)",
+    "units": "mm, grams",
+    "coordinate_note": "All local-frame coordinates: +X right / +Y down on the relevant drawing face, origin at the drawing's top-left corner of the part's bounding rectangle (servo output face for servos; PCB top-left for carrier).",
+    "verified_legend": "verified=true = read from a datasheet/product page during this session (2026-09-27). verified=false = estimated/[EST]; see dimensions.md register for basis.",
+    "generated": "2026-09-27"
+  },
+
+  "st3215_c018": {
+    "body": {"l": 45.2, "w": 24.7, "h": 35.0},
+    "mount": {
+      "holes": [[6.5, 2.5], [27.2, 2.5], [6.5, 22.2], [27.2, 22.2]],
+      "diameter": 2.2,
+      "screw": "M2 (PA2.0 self-tap)",
+      "note": "4 small drilled holes on output face, estimated from Fig.9 drawing; body bounding box 45.2x24.7 is the critical pocket dim. Corner PA2.0 case screws at ~(1.7,1.1),(43.5,1.1),(1.7,23.6),(43.5,23.6) are case fasteners, not servo-mount holes."
+    },
+    "shaft": {"spline": "25T", "outer_d": 5.9, "length": 6.0, "axis_dir": "body_long (normal to 45.2x24.7 face)", "note": "dual-shaft (双轴); rear end has plain O/D ~6mm hole on opposite face."},
+    "horn": {"span": 20.0, "arm_count": 0, "screw_holes": "M3", "note": "round octagonal flange horn O/D 19.95mm; 4x M3 tapped holes on ~14mm BCD; 4x O3.2 clearance on ~9mm BCD; hub 25T/5.9; horn retaining screw M3x6; flange thk 2.5, hub thk 4.5."},
+    "connector": {"type": "5264-3P, 2.54mm pitch, 3-pin (GND/Vcc/SIG), 15cm cable", "location": "bottom face (opposite output shaft)"},
+    "mass_g": 55.0,
+    "source": "https://www.feetech.cn/Data/feetechrc/upload/file/20240507/6385067068652648096680943.pdf ; drawing https://www.feetechrc.com/en/525603.html",
+    "verified": false,
+    "verified_notes": "body 45.2x24.7x35, shaft 25T/OD5.9, connector 5264-3P/15cm, mass 55g, horn M3x6, 4-M3 horn holes = VERIFIED from datasheet. Mount-hole xy coordinates = [EST] measured from the outline drawing (drawing does not label them); shaft protrusion length ~6 = [EST] from horn/hub drawing."
+  },
+
+  "sc0043_c001": {
+    "body": {"l": 20.3, "w": 8.5, "h": 19.39},
+    "mount": {
+      "holes": [[10.15, 0.0]],
+      "diameter": 2.0,
+      "screw": "M2",
+      "note": "2 ear mounting holes, center-to-center spacing 20.3mm along the length (symmetric about body center); ear hole O~2mm. Overall with ears 23.6 (plan) / 27.35 (bottom view)."
+    },
+    "shaft": {"spline": "28T", "outer_d": 3.9, "length": 3.1, "axis_dir": "normal to top face", "note": "output spline protrudes ~3.1mm above body."},
+    "horn": {"span": 15.0, "arm_count": 1, "screw_holes": "M1.7", "note": "28T/3.9 output; horn retaining screw M1.7; stock horn arm span ~15mm [EST]."},
+    "connector": {"type": "3-pin Feetech bus, 15cm cable", "location": "side/end face", "note": "exact JST family not published on product page; 3-pin 15cm wire verified."},
+    "mass_g": 6.6,
+    "source": "https://www.feetech.cn/en/559569",
+    "verified": false,
+    "verified_notes": "body 20.3x8.5x19.39, shaft 28T/OD3.9, horn screw M1.7, mass 6.6+/-0.5g, 15cm wire = VERIFIED from product page. Hole spacing 20.3 and ear O/D = [EST] from outline drawing; horn span 15 = [EST]."
+  },
+
+  "orin_carrier": {
+    "envelope": [103.0, 90.5, 34.77],
+    "board": [100.0, 79.0, 1.57],
+    "mount_holes": [[4.0, 4.0], [96.0, 4.0], [4.0, 56.0], [96.0, 56.0]],
+    "mount_screw": "M2.5",
+    "connectors": {
+      "barrel": [10.0, 66.0],
+      "40pin": [35.0, 5.0],
+      "csi1": [3.0, 21.0],
+      "csi2": [3.0, 40.0],
+      "microsd": [68.0, 62.0],
+      "usb": [25.0, 68.0],
+      "fan_exhaust": [50.0, 30.0]
+    },
+    "module_center": [48.0, 28.0],
+    "feet_height_mm": 5.0,
+    "source": "https://developer.nvidia.com/downloads/assets/embedded/secure/jetson/orin_nano/docs/jetson_orin_nano_devkit_carrier_board_specification_sp.pdf (Fig 4-1/4-2)",
+    "verified": false,
+    "verified_notes": "board 100.00x79.00x1.57, envelope 103.00x90.50x34.77, dev-kit mass 175g, DC barrel 5.5/2.5/9.5mm = VERIFIED from SP-11324-001. All connector xy coordinates and mount-hole xy = [EST] measured off Fig 4-1 raster (spec gives no coordinates); feet height ~5mm = [EST] from BOM packing note."
+  },
+
+  "lipo_3s_2200": {
+    "size": [105.0, 34.5, 26.0],
+    "mass_g": 185.0,
+    "connector": "XT60",
+    "balance": "JST-XH (4-pin)",
+    "note": "Typical long-pad 3S 2200 pack; varies 105x33~35x19~27 by brand. XT60 discharge lead + JST-XH 4-pin balance lead exit one end.",
+    "source": "https://zeeebattery.com/products/zeee-3s-lipo-battery-2200mah-11-1v-120c-xt60",
+    "verified": true
+  },
+
+  "bec_5v3a": {
+    "size": [30.0, 20.0, 10.0],
+    "wire_length_mm": 100.0,
+    "mass_g": 15.0,
+    "note": "Generic 5V/3A step-down BEC module; small 2-side PCB with output wires. [EST] representative board, exact size varies by brand.",
+    "source": "n/a (generic module, BOM s7 item #5)",
+    "verified": false
+  },
+
+  "xt60_switch": {
+    "xt60_plug": [17.5, 21.5, 14.0],
+    "switch_body": [50.0, 25.0, 20.0],
+    "note": "XT60 inline power switch: standard XT60 male/female housing (~17.5x21.5x14mm body) joined to an inline toggle/rocker switch housing with 16AWG leads. [EST] overall; XT60 housing is a standard part.",
+    "source": "n/a (standard XT60 + generic inline switch)",
+    "verified": false
+  },
+
+  "fuse_holder": {
+    "fuse": {"d": 5.0, "l": 20.0},
+    "holder_body": [30.0, 15.0, 10.0],
+    "note": "5x20mm glass fuse in inline waterproof holder with flying leads. [EST]; fuse itself (5x20mm) is standard.",
+    "source": "n/a (standard 5x20mm fuse + generic holder)",
+    "verified": false
+  },
+
+  "imuc_icm42688p": {
+    "size": [20.0, 20.0, 2.0],
+    "mount_holes": [[2.0, 2.0], [18.0, 2.0], [2.0, 18.0], [18.0, 18.0]],
+    "hole_d": 2.2,
+    "screw": "M2",
+    "mass_g": 4.0,
+    "note": "Generic ICM-42688-P SPI breakout (GY-class); chip itself is 2.5x3x0.91mm LGA. Breakout PCB ~20x20mm with 4x M2 mounting holes [EST].",
+    "source": "https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/ds-000347-icm-42688-p-v1.6.pdf",
+    "verified": false
+  },
+
+  "rocker_sole": {
+    "size": [40.0, 44.0, 4.0],
+    "top_local_z": -50.0,
+    "underside_profile_xz": [[-20.0, -52.0], [-18.0, -53.4], [-16.0, -54.0], [16.0, -54.0], [18.0, -53.4], [20.0, -52.0]],
+    "flat_center_length": 32.0,
+    "end_thickness": 2.0,
+    "material": "PETG",
+    "note": "Fixed compound-rocker underside integrated into shin_link. Symmetric heel/toe facets; no wheel, axle, bearing, ankle, extra servo, or additional assembly part. Lowest surface remains local z=-54 mm, so standing leg drop remains 138 mm.",
+    "source": "LaFengParrot MuJoCo flat-width + posture sweep, 2026-09-28",
+    "verified": false
+  },
+
+  "bearing_mr63": {"d": 3.0, "D": 6.0, "B": 2.5, "source": "https://detail.1688.com/offer/570803238776.html ; https://www.northwestbearings.co.uk/mr63zz-branded-metal-shielded-deep-groove-ball-bearing", "verified": true},
+  "bearing_mr84": {"d": 4.0, "D": 8.0, "B": 2.0, "note": "open MR84 = 4x8x2mm; shielded MR84ZZ = 4x8x3mm. Use open B=2 for the shaft pockets.", "source": "https://www.ktbearing.com/product/deep-groove-ball-bearing/deep-groove-ball-bearing-mr-series/ ; https://www.oss.nsk.com/mr84zzmc3p6-apn.html", "verified": true},
+
+  "fastener_m2":  {"head_d": 3.8, "head_h": 2.0, "thread": 2.0, "clear": 2.2, "lengths": ["M2x6"], "source": "https://engineeringhardware.com/guide/standard/din-912-socket-head-cap-screws/", "verified": true},
+  "fastener_m25": {"head_d": 4.5, "head_h": 2.5, "thread": 2.5, "clear": 2.7, "lengths": ["M2.5x8"], "source": "https://engineeringhardware.com/guide/standard/din-912-socket-head-cap-screws/", "verified": true},
+  "fastener_m3":  {"head_d": 5.5, "head_h": 3.0, "thread": 3.0, "clear": 3.2, "lengths": ["M3x10"], "source": "https://engineeringhardware.com/guide/standard/din-912-socket-head-cap-screws/", "verified": true}
+}

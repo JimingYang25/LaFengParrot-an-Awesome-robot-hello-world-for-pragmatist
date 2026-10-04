@@ -1,0 +1,130 @@
+<mujoco model="lafengparrot">
+  <compiler angle="degree" coordinate="local" eulerseq="xyz" meshdir="../meshes/visual"/>
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <default class="main">
+    <geom type="mesh" contype="0" conaffinity="0"/>
+    <joint damping="0.5" frictionloss="0.05"/>
+  </default>
+
+  <asset>
+    <mesh name="trunk" file="trunk.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="hip_L" file="hip_L.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="hip_R" file="hip_R.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="thigh_L" file="thigh_L.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="thigh_R" file="thigh_R.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="shin_L" file="shin_L.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="shin_R" file="shin_R.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="wing_L" file="wing_L.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="wing_R" file="wing_R.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="neck_yaw" file="neck_yaw.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="head" file="head.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="trunk_col" file="../collision/trunk_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="hip_L_col" file="../collision/hip_L_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="hip_R_col" file="../collision/hip_R_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="thigh_L_col" file="../collision/thigh_L_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="thigh_R_col" file="../collision/thigh_R_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="shin_L_col" file="../collision/shin_L_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="shin_R_col" file="../collision/shin_R_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="wing_L_col" file="../collision/wing_L_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="wing_R_col" file="../collision/wing_R_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="neck_yaw_col" file="../collision/neck_yaw_col.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="head_col" file="../collision/head_col.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 3" dir="0 0 -1" diffuse="0.8 0.8 0.8" specular="0.1 0.1 0.1"/>
+    <geom name="floor" type="plane" size="20 20 0.1" contype="1" conaffinity="1" rgba="0.8 0.8 0.8 1" friction="1 0.005 0.0001"/>
+    <!-- qpos order is MuJoCo DFS = leg-major (hip_roll_L, hip_pitch_L, knee_L, hip_roll_R, ...); actuator order (ctrl vector) is the canonical kinematics.json order; the RL wrapper maps state/action by joint NAME -->
+    <body name="trunk" pos="0 0 0">
+      <freejoint/>
+      <inertial pos="0.001038 -0.006302 0.054028" mass="0.924834" fullinertia="0.00181601 0.00186349 0.00141591 -1.1491e-05 6.6285e-05 6.0741e-05"/>
+      <geom name="trunk_vis" class="main" type="mesh" mesh="trunk"/>
+      <geom name="trunk_col" class="main" type="mesh" mesh="trunk_col"/>
+      <site name="imu_trunk" pos="0 0 0.05" size="0.01" rgba="1 0 0 1"/>
+      <body name="hip_L" pos="0 0.027 0">
+        <joint name="hip_roll_L" type="hinge" axis="1 0 0" limited="true" range="-22 22" armature="0.01"/>
+        <inertial pos="-0.000108 -9.9e-05 -0.042" mass="0.059188" fullinertia="9.254e-06 1.1712e-05 1.5581e-05 1.39e-07 0 0"/>
+        <geom name="hip_L_vis" class="main" type="mesh" mesh="hip_L"/>
+        <geom name="hip_L_col" class="main" type="mesh" mesh="hip_L_col"/>
+        <body name="thigh_L" pos="0 0 -0.042">
+          <joint name="hip_pitch_L" type="hinge" axis="0 1 0" limited="true" range="-90 90" armature="0.01"/>
+          <inertial pos="-4e-05 -4.1e-05 -0.029741" mass="0.142197" fullinertia="6.4095e-05 7.5887e-05 4.7524e-05 1.39e-07 -7.9e-08 -6.6e-08"/>
+          <geom name="thigh_L_vis" class="main" type="mesh" mesh="thigh_L"/>
+          <geom name="thigh_L_col" class="main" type="mesh" mesh="thigh_L_col"/>
+          <body name="shin_L" pos="0 0 -0.042">
+            <joint name="knee_L" type="hinge" axis="0 1 0" limited="true" range="0 150" armature="0.01"/>
+            <inertial pos="0 0 -0.035691" mass="0.020159" fullinertia="8.396e-06 8.3e-06 2.781e-06 -0 -0 -0"/>
+            <geom name="shin_L_vis" class="main" type="mesh" mesh="shin_L"/>
+            <geom name="shin_L_col" class="main" type="mesh" mesh="shin_L_col"/>
+            <geom name="shin_L_sole_heel_outer" type="box" size="0.00122066 0.022 0.0015" pos="-0.0181398 0 -0.0514712" euler="0 34.992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_L_sole_heel_inner" type="box" size="0.00104403 0.022 0.0015" pos="-0.016569 0 -0.0522633" euler="0 16.6992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_L_sole" type="box" size="0.016 0.022 0.0015" pos="0 0 -0.0525" euler="0 -0 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_L_sole_toe_inner" type="box" size="0.00104403 0.022 0.0015" pos="0.016569 0 -0.0522633" euler="0 -16.6992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_L_sole_toe_outer" type="box" size="0.00122066 0.022 0.0015" pos="0.0181398 0 -0.0514712" euler="0 -34.992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+          </body>
+        </body>
+      </body>
+      <body name="hip_R" pos="0 -0.027 0">
+        <joint name="hip_roll_R" type="hinge" axis="1 0 0" limited="true" range="-22 22" armature="0.01"/>
+        <inertial pos="-0.000108 9.9e-05 -0.042" mass="0.059188" fullinertia="9.254e-06 1.1712e-05 1.5581e-05 -1.39e-07 0 -0"/>
+        <geom name="hip_R_vis" class="main" type="mesh" mesh="hip_R"/>
+        <geom name="hip_R_col" class="main" type="mesh" mesh="hip_R_col"/>
+        <body name="thigh_R" pos="0 0 -0.042">
+          <joint name="hip_pitch_R" type="hinge" axis="0 1 0" limited="true" range="-90 90" armature="0.01"/>
+          <inertial pos="-4e-05 4.1e-05 -0.029741" mass="0.142197" fullinertia="6.4095e-05 7.5887e-05 4.7524e-05 -1.39e-07 -7.9e-08 6.6e-08"/>
+          <geom name="thigh_R_vis" class="main" type="mesh" mesh="thigh_R"/>
+          <geom name="thigh_R_col" class="main" type="mesh" mesh="thigh_R_col"/>
+          <body name="shin_R" pos="0 0 -0.042">
+            <joint name="knee_R" type="hinge" axis="0 1 0" limited="true" range="0 150" armature="0.01"/>
+            <inertial pos="0 0 -0.035691" mass="0.020159" fullinertia="8.396e-06 8.3e-06 2.781e-06 -0 -0 -0"/>
+            <geom name="shin_R_vis" class="main" type="mesh" mesh="shin_R"/>
+            <geom name="shin_R_col" class="main" type="mesh" mesh="shin_R_col"/>
+            <geom name="shin_R_sole_heel_outer" type="box" size="0.00122066 0.022 0.0015" pos="-0.0181398 0 -0.0514712" euler="0 34.992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_R_sole_heel_inner" type="box" size="0.00104403 0.022 0.0015" pos="-0.016569 0 -0.0522633" euler="0 16.6992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_R_sole" type="box" size="0.016 0.022 0.0015" pos="0 0 -0.0525" euler="0 -0 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_R_sole_toe_inner" type="box" size="0.00104403 0.022 0.0015" pos="0.016569 0 -0.0522633" euler="0 -16.6992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+            <geom name="shin_R_sole_toe_outer" type="box" size="0.00122066 0.022 0.0015" pos="0.0181398 0 -0.0514712" euler="0 -34.992 0" contype="1" conaffinity="1" friction="0.9 0.005 0.0001" rgba="0.2 0.2 0.9 1"/>
+          </body>
+        </body>
+      </body>
+      <body name="wing_L" pos="0 0.062 0.06">
+        <joint name="wing_flap_L" type="hinge" axis="1 0 0" limited="true" range="-45 45" armature="0.002"/>
+        <inertial pos="0.0041 0.055225 -0" mass="0.020454" fullinertia="2.9438e-05 4.088e-06 3.3386e-05 -9.45e-07 -0 -0"/>
+        <geom name="wing_L_vis" class="main" type="mesh" mesh="wing_L"/>
+        <geom name="wing_L_col" class="main" type="mesh" mesh="wing_L_col"/>
+      </body>
+      <body name="wing_R" pos="0 -0.062 0.06">
+        <joint name="wing_flap_R" type="hinge" axis="-1 0 0" limited="true" range="-45 45" armature="0.002"/>
+        <inertial pos="0.0041 -0.055225 0" mass="0.020454" fullinertia="2.9438e-05 4.088e-06 3.3386e-05 9.45e-07 0 -0"/>
+        <geom name="wing_R_vis" class="main" type="mesh" mesh="wing_R"/>
+        <geom name="wing_R_col" class="main" type="mesh" mesh="wing_R_col"/>
+      </body>
+      <body name="neck_yaw" pos="0 0 0.133">
+        <joint name="neck_yaw" type="hinge" axis="0 0 1" limited="true" range="-90 90" armature="0.002"/>
+        <inertial pos="-0.000157 0.000234 0.026486" mass="0.034111" fullinertia="1.5013e-05 1.5595e-05 3.982e-06 1.2e-08 4.2e-08 -1.89e-07"/>
+        <geom name="neck_yaw_vis" class="main" type="mesh" mesh="neck_yaw"/>
+        <geom name="neck_yaw_col" class="main" type="mesh" mesh="neck_yaw_col"/>
+        <body name="head" pos="0 0 0.052">
+          <joint name="neck_pitch" type="hinge" axis="0 1 0" limited="true" range="-45 45" armature="0.002"/>
+          <inertial pos="0.003175 0 0.030144" mass="0.040903" fullinertia="2.0722e-05 3.0039e-05 2.5399e-05 -0 -1.108e-06 -0"/>
+          <geom name="head_vis" class="main" type="mesh" mesh="head"/>
+          <geom name="head_col" class="main" type="mesh" mesh="head_col"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="hip_roll_L" joint="hip_roll_L" kp="40" kv="4" ctrlrange="-0.383972 0.383972" forcelimited="true" forcerange="-2.72 2.72"/>
+    <position name="hip_roll_R" joint="hip_roll_R" kp="40" kv="4" ctrlrange="-0.383972 0.383972" forcelimited="true" forcerange="-2.72 2.72"/>
+    <position name="hip_pitch_L" joint="hip_pitch_L" kp="40" kv="4" ctrlrange="-1.5708 1.5708" forcelimited="true" forcerange="-2.72 2.72"/>
+    <position name="hip_pitch_R" joint="hip_pitch_R" kp="40" kv="4" ctrlrange="-1.5708 1.5708" forcelimited="true" forcerange="-2.72 2.72"/>
+    <position name="knee_L" joint="knee_L" kp="40" kv="4" ctrlrange="0 2.61799" forcelimited="true" forcerange="-2.72 2.72"/>
+    <position name="knee_R" joint="knee_R" kp="40" kv="4" ctrlrange="0 2.61799" forcelimited="true" forcerange="-2.72 2.72"/>
+    <position name="wing_flap_L" joint="wing_flap_L" kp="40" kv="4" ctrlrange="-0.785398 0.785398" forcelimited="true" forcerange="-0.22 0.22"/>
+    <position name="wing_flap_R" joint="wing_flap_R" kp="40" kv="4" ctrlrange="-0.785398 0.785398" forcelimited="true" forcerange="-0.22 0.22"/>
+    <position name="neck_yaw" joint="neck_yaw" kp="40" kv="4" ctrlrange="-1.5708 1.5708" forcelimited="true" forcerange="-0.22 0.22"/>
+    <position name="neck_pitch" joint="neck_pitch" kp="40" kv="4" ctrlrange="-0.785398 0.785398" forcelimited="true" forcerange="-0.22 0.22"/>
+  </actuator>
+</mujoco>
