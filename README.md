@@ -4,6 +4,11 @@ LaFengParrot is a 3D-printable, Jetson-powered parrot table robot with a
 MuJoCo model and a reinforcement-learning locomotion stack. The mechanical
 design targets a Jetson Orin Nano Super 8 GB and commonly available parts.
 
+This repository is an engineering starting point for developers and
+researchers who want to design, train, evaluate, and deploy their own robot
+policies. It provides a reproducible mechanical and simulation baseline rather
+than a finished consumer product.
+
 ## Current status
 <img width="680" height="440" alt="屏幕录制 2026-10-05 033540" src="https://github.com/user-attachments/assets/1adbbdf9-e6c8-4775-beb8-8d4764a9c03f" />
 
@@ -51,7 +56,7 @@ at their reference positions.
 ## Clone the repository
 
 ```bash
-git clone https://github.com/JimingYang25/LaFengParrot__An-Awesome-Host-to-Local-ROBOT
+git clone https://github.com/JimingYang25/LaFengParrot__An-Awesome-starting-point-for-your-policy.git LaFengParrot
 cd LaFengParrot
 ```
 
@@ -105,7 +110,17 @@ MuJoCo crash logs, and large generated SVG drawings are intentionally ignored.
 3. Add lateral foot-separation feedback.
 4. Retrain from `h008` and gradually anneal the harness to zero.
 
+## Collaboration and contact
+
+Bug reports, reproducible experiments, and focused improvements are welcome
+through GitHub issues and pull requests. For deeper collaboration involving
+robot hardware, reinforcement learning, deployment, or research, contact
+[2132720978@qq.com](mailto:2132720978@qq.com).
+
 ## License
 
-No license has been selected yet. All rights are reserved unless a license is
-added later.
+Copyright 2026 Jiming ([JimingYang25](https://github.com/JimingYang25)).
+
+This project—including its source code, robot descriptions, CAD files, and
+documentation—is licensed under the [Apache License 2.0](LICENSE), unless a
+file states otherwise.
