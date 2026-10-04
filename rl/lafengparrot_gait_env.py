@@ -100,6 +100,14 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
 
         self.sole_geom_ids = {}
         self.sole_center_ids = {}
+        self.floor_geom_id = mujoco.mj_name2id(
+            self.model,
+            mujoco.mjtObj.mjOBJ_GEOM,
+            "floor",
+        )
+        if self.floor_geom_id < 0:
+            raise ValueError("MJCF must define a geom named 'floor'")
+        self._floor_geom_ids = {self.floor_geom_id}
         for index, side in enumerate(("L", "R")):
             prefix = f"shin_{side}_sole"
             self.sole_geom_ids[index] = {
@@ -150,6 +158,11 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
         self.last_cycle_valid = False
         self.invalid_touchdown = False
         self.invalid_touchdown_steps = 0
+        self.cross_foot_contact_count = 0
+        self.cross_foot_contact_steps = 0
+        self.episode_cross_foot_contacts = 0
+        self.foot_lateral_separation = float("inf")
+        self.minimum_foot_lateral_separation = float("inf")
         self._geom_velocity = np.zeros(6, dtype=np.float64)
 
     def set_harness_strength(self, strength):
@@ -180,15 +193,49 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
             result[self.actuator_ids[name]] = reference[index]
         return result
 
+    @staticmethod
+    def _contact_between(contact, geom_ids_a, geom_ids_b):
+        geom1 = int(contact.geom1)
+        geom2 = int(contact.geom2)
+        return bool(
+            (geom1 in geom_ids_a and geom2 in geom_ids_b)
+            or (geom2 in geom_ids_a and geom1 in geom_ids_b)
+        )
+
     def _contacts_now(self):
+        """Return sole-versus-floor contacts only.
+
+        A sole touching the other foot is a self-collision, not a ground
+        contact.  Keeping these signals separate prevents a crossed-foot pose
+        from satisfying the gait event detector.
+        """
         result = np.zeros(2, dtype=np.float64)
         for contact_id in range(self.data.ncon):
             contact = self.data.contact[contact_id]
             for side in (0, 1):
-                ids = self.sole_geom_ids[side]
-                if contact.geom1 in ids or contact.geom2 in ids:
+                if self._contact_between(
+                    contact,
+                    self.sole_geom_ids[side],
+                    self._floor_geom_ids,
+                ):
                     result[side] = 1.0
         return result
+
+    def _cross_foot_contact_count(self):
+        """Count active contacts between left and right sole geometries."""
+        return sum(
+            self._contact_between(
+                self.data.contact[contact_id],
+                self.sole_geom_ids[0],
+                self.sole_geom_ids[1],
+            )
+            for contact_id in range(self.data.ncon)
+        )
+
+    def _foot_lateral_center_separation(self):
+        left_y = self.data.geom_xpos[self.sole_center_ids[0], 1]
+        right_y = self.data.geom_xpos[self.sole_center_ids[1], 1]
+        return abs(float(left_y - right_y))
 
     def _contact_slip_speeds(self):
         """Return each sole's maximum ground-contact tangential speed.
@@ -203,9 +250,15 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
             contact = self.data.contact[contact_id]
             for side in (0, 1):
                 sole_ids = self.sole_geom_ids[side]
-                if contact.geom1 in sole_ids:
+                if (
+                    contact.geom1 in sole_ids
+                    and contact.geom2 == self.floor_geom_id
+                ):
                     geom_id = int(contact.geom1)
-                elif contact.geom2 in sole_ids:
+                elif (
+                    contact.geom2 in sole_ids
+                    and contact.geom1 == self.floor_geom_id
+                ):
                     geom_id = int(contact.geom2)
                 else:
                     continue
@@ -308,6 +361,11 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
         self.last_cycle_valid = False
         self.invalid_touchdown = False
         self.invalid_touchdown_steps = 0
+        self.cross_foot_contact_count = 0
+        self.cross_foot_contact_steps = 0
+        self.episode_cross_foot_contacts = 0
+        self.foot_lateral_separation = float("inf")
+        self.minimum_foot_lateral_separation = float("inf")
 
         super().reset(seed=seed, options=options)
 
@@ -338,6 +396,9 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
         self.foot_velocities[:] = 0.0
         self.contact_slip_speed[:] = 0.0
         self.foot_contacts = self._contacts_now()
+        self.cross_foot_contact_count = self._cross_foot_contact_count()
+        self.foot_lateral_separation = self._foot_lateral_center_separation()
+        self.minimum_foot_lateral_separation = self.foot_lateral_separation
         self.desired_contacts = self._desired_contacts()
 
         info = {
@@ -488,6 +549,17 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
         self.foot_contacts = self._contacts_now()
         self.desired_contacts = self._desired_contacts()
         self.contact_slip_speed = self._contact_slip_speeds()
+        self.cross_foot_contact_count = self._cross_foot_contact_count()
+        self.episode_cross_foot_contacts += self.cross_foot_contact_count
+        if self.cross_foot_contact_count:
+            self.cross_foot_contact_steps += 1
+        else:
+            self.cross_foot_contact_steps = 0
+        self.foot_lateral_separation = self._foot_lateral_center_separation()
+        self.minimum_foot_lateral_separation = min(
+            self.minimum_foot_lateral_separation,
+            self.foot_lateral_separation,
+        )
         stance_mask = self.desired_contacts * self.foot_contacts
         self.cycle_slip_distance += (
             self.contact_slip_speed * stance_mask * self.control_dt
@@ -548,6 +620,16 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
         accumulated_slip_penalty = float(
             np.mean(np.clip(self.cycle_slip_distance / 0.008, 0.0, 4.0))
         )
+        # The nominal sole-centre spacing is 54 mm and the two soles occupy
+        # 44 mm laterally.  Begin discouraging leg crossing before contact,
+        # while retaining a small margin for collision-shape rotation.
+        separation_penalty = float(
+            np.clip(
+                (0.048 - self.foot_lateral_separation) / 0.010,
+                0.0,
+                2.0,
+            )
+        )
 
         forward_speed = float(self.data.qvel[0])
         lateral_speed = float(self.data.qvel[1])
@@ -566,6 +648,8 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
             - 0.20 * (1.0 - contact_score)
             - 2.00 * slip_penalty
             - 0.80 * accumulated_slip_penalty
+            - 0.75 * separation_penalty
+            - 4.00 * min(self.cross_foot_contact_count, 2)
             - 0.15 * lateral_speed**2
             - 0.08 * yaw_rate**2
             - 0.008 * np.sum(self.filtered_action**2)
@@ -579,6 +663,7 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
             or abs(float(self.data.qpos[1])) > 0.20
             or self.steps_since_event > self.event_timeout_steps
             or self.invalid_touchdown
+            or self.cross_foot_contact_steps >= 3
         )
         truncated = self.elapsed_steps >= self.max_episode_steps
         if terminated:
@@ -615,6 +700,13 @@ class LaFengParrotGaitEnv(LaFengParrotStandEnv):
             "event_timeout": self.steps_since_event > self.event_timeout_steps,
             "invalid_touchdown": self.invalid_touchdown,
             "invalid_touchdown_steps": self.invalid_touchdown_steps,
+            "cross_foot_contact_count": self.cross_foot_contact_count,
+            "cross_foot_contact_steps": self.cross_foot_contact_steps,
+            "episode_cross_foot_contacts": self.episode_cross_foot_contacts,
+            "foot_lateral_separation": self.foot_lateral_separation,
+            "minimum_foot_lateral_separation": (
+                self.minimum_foot_lateral_separation
+            ),
         }
 
         self.gait_phase = (

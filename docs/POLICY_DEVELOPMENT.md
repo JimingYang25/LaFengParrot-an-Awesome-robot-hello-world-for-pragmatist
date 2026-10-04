@@ -5,9 +5,10 @@ change the locomotion task, or connect a different reinforcement-learning
 algorithm to LaFengParrot.
 
 The repository is a starting point, not a graduated walking controller. The
-included checkpoint is reliable with a training harness strength of `0.08`,
-but it has not passed the unassisted (`0.00`) graduation gate. The current
-environment also has a known contact-classification issue described below.
+included checkpoint is usable with a training harness strength of `0.08`, but
+it has not passed the assisted 20/20 gate or the unassisted (`0.00`)
+graduation gate. Foot-to-floor and foot-to-foot contacts are classified
+separately and covered by regression tests.
 
 ## 1. Reproduce the baseline first
 
@@ -27,12 +28,15 @@ python robot_description/verify_mjcf.py
 Evaluate and view the shipped checkpoint at its verified harness level:
 
 ```bash
-python rl/evaluate_gait_ppo.py --episodes 10 --harness 0.08 --device cpu
+python -m unittest -v tests.test_gait_contacts
+python rl/evaluate_gait_ppo.py --episodes 20 --harness 0.08 --device cpu
 python rl/watch_gait_policy.py --harness 0.08 --device cpu
 ```
 
-Expected baseline: 10/10 evaluation episodes pass. Do not begin tuning until
-the model verifier passes and the baseline result is reproducible.
+Expected baseline for seeds `126..145`: 19/20 episodes pass, no episode has a
+cross-foot contact, and seed `141` ends in an early startup balance failure.
+Do not begin tuning until the model verifier, contact tests, and this baseline
+are reproducible.
 
 ## 2. Understand the policy contract
 
@@ -136,13 +140,15 @@ python rl/train_gait_ppo.py \
   --quiet \
   --steps 200000 \
   --envs 8 \
+  --reset-noise-scale 0.25 \
+  --learning-rate 0.00005 \
   --start-harness 0.08 \
   --end-harness 0.08 \
   --device cuda
 ```
 
-Re-evaluate at `0.08`. Only after restoring 10/10 should assistance be reduced.
-Use a slow stage rather than a jump:
+Re-evaluate at `0.08`. Only after reaching 20/20 with zero cross-foot contacts
+should assistance be reduced. Use a slow stage rather than a jump:
 
 ```bash
 python rl/train_gait_ppo.py \
@@ -186,7 +192,8 @@ evaluation results.
 | Reference motion | `REFERENCE_KNOTS` | Changes lift, swing, touchdown, and double-support timing. Verify contact order after editing. |
 | Gait frequency | `gait_frequency` | Changes cadence. Faster is not automatically more stable or faster forward. |
 | Leg authority | `residual_scale` | Larger values permit recovery but also increase saturation and violent motion. |
-| Initial-state difficulty | `reset_noise_scale` | Improves robustness when raised gradually. |
+| Initial-state difficulty | `--reset-noise-scale` | Improves robustness when raised gradually. |
+| Resume learning rate | `--learning-rate` | Lower values reduce policy drift during narrow robustness refinements. |
 | Reward terms | `step()` reward expression | Can change the learned behavior completely; validate physical metrics, not reward alone. |
 | PPO optimization | `PPO(...)` in `train_gait_ppo.py` | Tune learning rate, rollout length, batch size, entropy, and network size conservatively. |
 
@@ -208,6 +215,7 @@ The provided evaluator marks an episode as passed only when:
 - It completes at least four gait cycles.
 - Every completed cycle is classified as a successful forward cycle.
 - Trunk displacement is at least 0.08 m.
+- No left/right sole collision occurs, even momentarily.
 
 The gait audit additionally requires:
 
@@ -220,24 +228,24 @@ A candidate graduates only after 20/20 deterministic episodes at harness
 that stands on one leg, marches in place, slides its feet, or depends on the
 harness has not graduated.
 
-## 7. Known issue to fix before serious curriculum work
+## 7. Contact-safety implementation
 
-The current environment treats any contact involving a sole geometry as a
-ground contact. A replay of the included checkpoint detected occasional
-left/right sole collisions, so foot-to-foot contact can be misclassified as
-floor contact.
+`_contacts_now()` reports a stance contact only for a sole-versus-floor pair.
+Left/right sole contacts are counted independently, penalized immediately,
+and terminate an episode when they persist for three control steps. The
+evaluator is stricter: even one cross-foot contact makes the episode fail. A
+lateral-separation term discourages leg crossing before collision.
 
-The intended correction is:
+The regression tests include a captured crossed-foot configuration lifted
+above the floor. This verifies that self-collision is detected without being
+misreported as ground contact or contact slip:
 
-1. Count a foot contact only when the other geometry is the floor.
-2. Detect left/right foot collisions separately.
-3. Penalize or terminate persistent leg crossing.
-4. Add a regression audit reporting cross-foot contacts and minimum lateral
-   foot separation.
-5. Re-establish 10/10 at harness `0.08` before resuming the curriculum.
+```bash
+python -m unittest -v tests.test_gait_contacts
+```
 
-Do not disable physical foot collision merely to hide the symptom. The real
-robot cannot pass one foot through the other.
+Keep physical collision enabled. The real robot cannot pass one foot through
+the other, and disabling collision would invalidate the gait result.
 
 ## 8. Contribution workflow
 

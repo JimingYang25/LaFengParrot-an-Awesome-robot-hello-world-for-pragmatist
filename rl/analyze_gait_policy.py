@@ -25,6 +25,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--harness", type=float, default=0.0)
     parser.add_argument("--reference", action="store_true")
+    parser.add_argument("--seed", type=int, default=126)
     args = parser.parse_args()
 
     robot = LaFengParrotGaitEnv(harness_strength=args.harness)
@@ -42,6 +43,7 @@ def main():
             env=env,
             device="cpu",
         )
+        env.seed(args.seed)
         obs = env.reset()
     start_trunk_x = float(robot.data.qpos[0])
     previous_event = robot.gait_event_state
@@ -109,6 +111,7 @@ def main():
         footprint_advances.extend(np.diff(touchdown_x[side]).tolist())
 
     print("\nGait validity audit")
+    print(f"Reset seed: {args.seed}")
     print(
         "Stopped by: "
         f"invalid_touchdown={info.get('invalid_touchdown', False)} "
@@ -118,6 +121,14 @@ def main():
     )
     print(f"Trunk displacement: {trunk_distance:+.4f} m")
     print(f"Completed cycles: {info['completed_cycles']}")
+    print(
+        "Cross-foot contacts: "
+        f"{int(info.get('episode_cross_foot_contacts', 0))}"
+    )
+    print(
+        "Minimum lateral foot separation: "
+        f"{float(info.get('minimum_foot_lateral_separation', float('nan'))) * 1000:.1f} mm"
+    )
     print(
         "Mean same-foot footprint advance: "
         f"{np.mean(footprint_advances) * 1000:+.1f} mm"
@@ -143,6 +154,7 @@ def main():
         and bool(all_slip)
         and np.max(all_slip) <= 0.008
         and min(all_leads) > 0.003
+        and int(info.get("episode_cross_foot_contacts", 0)) == 0
     )
     print("VALID FORWARD FOOTSTEP GAIT:", valid)
     if env is not None:

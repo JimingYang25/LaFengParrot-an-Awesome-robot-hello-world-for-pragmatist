@@ -26,11 +26,18 @@ RUN_DIR = ROOT / "rl" / "runs" / "gait_ppo_v3_valid"
 CHECKPOINT_DIR = RUN_DIR / "checkpoints"
 
 
-def make_env(rank, seed, target_speed, harness_strength):
+def make_env(
+    rank,
+    seed,
+    target_speed,
+    harness_strength,
+    reset_noise_scale,
+):
     def _init():
         env = LaFengParrotGaitEnv(
             target_speed=target_speed,
             harness_strength=harness_strength,
+            reset_noise_scale=reset_noise_scale,
         )
         env.reset(seed=seed + rank)
         return Monitor(env)
@@ -121,6 +128,21 @@ def main():
     parser.add_argument("--envs", type=int, default=16)
     parser.add_argument("--seed", type=int, default=126)
     parser.add_argument("--speed", type=float, default=0.025)
+    parser.add_argument(
+        "--learning-rate",
+        type=float,
+        default=None,
+        help="Override PPO's learning rate, including when resuming.",
+    )
+    parser.add_argument(
+        "--reset-noise-scale",
+        type=float,
+        default=0.25,
+        help=(
+            "Scale initial tilt/velocity randomization inherited from the "
+            "standing task (default: 0.25)."
+        ),
+    )
     parser.add_argument("--start-harness", type=float, default=1.0)
     parser.add_argument("--end-harness", type=float, default=0.0)
     parser.add_argument("--decay-fraction", type=float, default=0.80)
@@ -146,7 +168,13 @@ def main():
 
     vec_env = SubprocVecEnv(
         [
-            make_env(rank, args.seed, args.speed, args.start_harness)
+            make_env(
+                rank,
+                args.seed,
+                args.speed,
+                args.start_harness,
+                args.reset_noise_scale,
+            )
             for rank in range(args.envs)
         ],
         start_method="forkserver",
@@ -212,6 +240,10 @@ def main():
             verbose=1,
         )
         copy_standing_policy(model, args.device)
+
+    if args.learning_rate is not None:
+        model.learning_rate = args.learning_rate
+        model.lr_schedule = lambda _: args.learning_rate
 
     if args.quiet:
         model.verbose = 0

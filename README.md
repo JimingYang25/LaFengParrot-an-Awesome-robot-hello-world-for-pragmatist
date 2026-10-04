@@ -18,10 +18,13 @@ than a finished consumer product.
 - MuJoCo model: 10 actuators and a floating base; stable passive standing.
 - Controller: PPO residual policy around an alternating six-joint leg reference.
 - Verified checkpoint: `h008`, evaluated with 8% training-harness strength.
-- Verified result: 10/10 gait episodes, about 0.56 m forward travel per 20 s.
+- Fixed-seed result: 19/20 episodes (`126..145`), zero cross-foot
+  contacts, and about 0.54 m mean forward travel per 20 s.
 - Graduation target: harness `0.00` and 20/20 strict evaluation episodes.
-- Known issue: occasional left/right sole self-contact is currently interpreted
-  as ground contact. Fix this before reducing the harness below 0.08.
+- Contact safety: floor contact and foot-to-foot collision are classified
+  separately; any cross-foot contact fails evaluation.
+- Current limitation: seed `141` exposes an early startup balance failure at
+  `h008`, so the checkpoint is a development baseline, not a deployable gait.
 
 
 <img width="880" height="640" alt="exploded" src="https://github.com/user-attachments/assets/67be27cf-9a0d-472f-b9ac-eb9058fd098b" />
@@ -101,7 +104,7 @@ has not yet passed the graduation test at that setting.
 ## Evaluate the checkpoint
 
 ```bash
-python rl/evaluate_gait_ppo.py --episodes 10 --harness 0.08 --device cpu
+python rl/evaluate_gait_ppo.py --episodes 20 --harness 0.08 --device cpu
 ```
 
 The repository retains `rl/runs/gait_ppo_v3_valid/gait_ppo_final.zip` and its
@@ -110,10 +113,11 @@ MuJoCo crash logs, and large generated SVG drawings are intentionally ignored.
 
 ## Next milestone
 
-1. Restrict ground-contact detection to sole-versus-floor contacts.
-2. Detect and penalize left/right foot collisions separately.
-3. Add lateral foot-separation feedback.
-4. Retrain from `h008` and gradually anneal the harness to zero.
+1. Improve startup robustness from 19/20 to 20/20 at harness `0.08`.
+2. Gradually anneal the harness to zero without losing the collision gate.
+3. Expand reset and push randomization, then repeat fixed-seed evaluation.
+4. Validate actuator limits and add a hardware emergency-stop layer before
+   transferring any learned policy to the physical robot.
 
 ## Collaboration and contact
 
