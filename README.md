@@ -5,6 +5,10 @@ MuJoCo model and a reinforcement-learning locomotion stack. The mechanical
 design targets a Jetson Orin Nano Super 8 GB and commonly available parts.
 
 ## Current status
+<img width="1018" height="764" alt="屏幕录制 2026-10-05 033540" src="https://github.com/user-attachments/assets/1adbbdf9-e6c8-4775-beb8-8d4764a9c03f" />
+
+
+
 
 - MuJoCo model: 10 actuators and a floating base; stable passive standing.
 - Controller: PPO residual policy around an alternating six-joint leg reference.
